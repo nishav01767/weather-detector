@@ -1,0 +1,99 @@
+<!DOCTYPE html><html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Weather Prediction App</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: linear-gradient(to right, #4facfe, #00f2fe);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }.weather-box {
+  background: #fff;
+  padding: 25px;
+  border-radius: 10px;
+  width: 320px;
+  text-align: center;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+}
+
+h2 {
+  margin-bottom: 15px;
+  color: #333;
+}
+
+input {
+  width: 80%;
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+button {
+  padding: 10px 20px;
+  background: #4facfe;
+  border: none;
+  color: #fff;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+button:hover {
+  background: #00c6ff;
+}
+
+.result {
+  margin-top: 20px;
+  font-size: 16px;
+  color: #333;
+}
+
+.temp {
+  font-size: 30px;
+  font-weight: bold;
+}
+
+  </style>
+</head>
+<body>  <div class="weather-box">
+    <h2>Weather Prediction App</h2>
+    <input type="text" id="city" placeholder="Enter City Name">
+    <br>
+    <button onclick="getWeather()">Check Weather</button><div class="result" id="result"></div>
+
+  </div>  <script>
+    function getWeather() {
+      const city = document.getElementById("city").value;
+      const apiKey = "6c714709a69d88f8033636f52d5974aa"; // Replace with your OpenWeatherMap API key
+      const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&units=metric&appid=${apiKey}`;
+
+      if (city === "") {
+        document.getElementById("result").innerHTML = "Please enter a city name";
+        return;
+      }
+
+      fetch(url)
+        .then(response => response.json())
+        .then(data => {
+          if (data.cod === "404") {
+            document.getElementById("result").innerHTML = "City not found";
+          } else {
+            document.getElementById("result").innerHTML = `
+              <div class="temp">${data.main.temp}°C</div>
+              <div>${data.weather[0].main}</div>
+              <div>Humidity: ${data.main.humidity}%</div>
+              <div>Wind Speed: ${data.wind.speed} m/s</div>
+            `;
+          }
+        })
+        .catch(() => {
+          document.getElementById("result").innerHTML = "Error fetching data";
+        });
+    }
+  </script></body>
+</html>
